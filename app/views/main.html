@@ -1,7 +1,14 @@
 <h1>My App!!</h1>
 
-<p>This is some text and my name is : {{ name }}</p>
+        <h2>Message is: {{ message }}</h2>
 
-<button ng-click="saySarasa()">Say Sarasa!!!</button>
+<button ng-click="notifyChildren()">Notify children</button> | <button ng-click="emitToRootScope()">Emit to $rootScope</button>
+<br/>
+<h4>Result from doing stuff: {{ result }}</h4>
+
+<div ng-controller="NestedCtrl" style="margin: 5% 5%; padding: 5% 5%; border: solid 1px #e6e6e6">
+    <h4>Nested controller</h4>
+    <button ng-click="emitToParentScope()">Emit to parent</button>
+</div>
 
 <a href="#/hello">Go to hello</a>
