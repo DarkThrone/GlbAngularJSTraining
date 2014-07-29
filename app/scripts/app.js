@@ -3,76 +3,116 @@
  */
 
 'use strict';
+var app = angular.module('MyApp', ['ngRoute']);
 
-angular.module('MyApp', ['ngRoute'])
-    .config(function($routeProvider){
-        $routeProvider
-            .when('/', {
-                templateUrl : 'app/views/main.html',
-                controller: 'HomeCtrl'
-            })
-            .when('/hello', {
-                templateUrl : 'app/views/hello.html',
-                controller: 'HelloCtrl'
-            })
-            .otherwise({ redirectTo: '/' });
-    })
+app.controller('HomeCtrl', ['$rootScope', '$scope', 'MyConfigurable',
+function($rootScope, $scope, MyConfigurable){
+    $scope.name = "";
+    $scope.lastname = "";
+    $scope.people = [];
 
-    .controller('HomeCtrl', ['$rootScope', '$scope', 'MyService',
-    function($rootScope, $scope, MyService){
-        $scope.array = [1, 2, 3, 4];
-        $scope.obj = { a: 1, b: 2};
-        $scope.message = "No message";
+    $scope.addPerson = function(name, lastname){
+        var person = { name: name, lastname: lastname };
 
-        var printMsg = function(scope){
-            return function(data){
-                console.log(scope);
-                console.log(data);
-                $scope.message = "Scope is: " + scope + " event: " + data.name;
-            };
-        };
+        MyConfigurable.addPerson(person);
 
-        $rootScope.$on('notifyRootScope', printMsg('$rootScope'));
-        $rootScope.$on('notifyParent', printMsg('$rootScope'));
-        $rootScope.$on('notifyOthers', printMsg('$rootScope'));
+        $scope.people.push(person);
+        $scope.name = "";
+        $scope.lastname = "";
+    }
+}]);
 
-        $scope.$on('notifyChildren', printMsg('parent $scope'));
-        $scope.$on('notifyParent', printMsg('parent $scope'));
+app.controller('HelloCtrl', ['$rootScope', '$scope', 'MyConfigurable',
+function($rootScope, $scope, MyConfigurable){
+    $scope.search = '';
+    $scope.id = '';
+    $scope.found = false;
+    $scope.person = {};
+    $scope.people = [];
 
+    $scope.find = function(id){
+        var person = MyConfigurable.getPerson(id);
 
-        $scope.notifyChildren = function(){
-            $rootScope.$broadcast('notifyChildren', [ 'value from $rootScope' ]);
-        };
+        $scope.id = person && $scope.search || '';
+        $scope.found = !!person;
+        $scope.person = person || {};
 
-        $scope.emitToRootScope = function(){
-            $scope.$emit('notifyRootScope', [ 'Value from $scope' ]);
-        };
-    }])
+        $scope.search = '';
+    };
 
-    .controller('NestedCtrl', ['$rootScope', '$scope',
-    function($rootScope, $scope){
-        var printMsg = function(scope){
-            return function(data){
-                console.log(scope);
-                console.log(data);
-                $scope.message = "Scope is: " + scope + " event: " + data.name;
-            };
-        };
+    $scope.findAll = function(){
+        $scope.people = MyConfigurable.getAll();
+    }
+}]);
 
-        $scope.$on('notifyChildren', printMsg('nested $scope'));
-
-        $scope.emitToParentScope = function(){
-            $scope.$emit('notifyParent', [ 'Value from nested $scope' ]);
-        };
-    }])
-
-    .controller('HelloCtrl', ['$rootScope', '$scope',
-    function($rootScope, $scope){
-        $rootScope.$broadcast('notifyOthers', ['notifying others!']);
-    }])
-
-    .factory('MyService', [function(){
+    app.factory('MyFactory', [function(){
+        var people = [];
         return {
-            doStuff : function(){ return "Doing stuff!! Really busy!!"; }
+            addPerson: function(person){
+                people.push(person);
+            },
+            getPerson: function(id){
+                return people[id];
+            },
+            getAll : function(){
+                return people;
+            }
         };
     }]);
+    app.service('MySharedService', [function(){
+        this.people = [];
+
+        this.addPerson = function(person){
+            this.people.push(person);
+        };
+
+        this.getPerson = function(id){
+            return this.people[id];
+        };
+
+        this.getAll = function(){
+            return this.people;
+        };
+    }]);
+    app.provider('MyConfigurable', [function(){
+        var that = this;
+        that.configurableProp = "";
+
+        function ConfigurableService(){
+            this.people = [];
+        }
+
+        ConfigurableService.prototype.addPerson = function(person){
+            console.log("Adding person with configurableProp: " + that.configurableProp);
+            this.people.push(person);
+        };
+
+        ConfigurableService.prototype.getPerson = function(id){
+            console.log("Getting person with configurableProp: " + that.configurableProp);
+            return this.people[id];
+        };
+
+        ConfigurableService.prototype.getAll = function(){
+            console.log("Gatting all with configurableProp: " + that.configurableProp);
+            return this.people;
+        };
+
+        this.$get = [function(){
+            return new ConfigurableService();
+        }];
+    }]);
+
+app.config(['$routeProvider', 'MyConfigurableProvider', function($routeProvider, MyConfigurableProvider){
+    MyConfigurableProvider.configurableProp = "[ConfigurableProvider]";
+
+    $routeProvider
+        .when('/', {
+            templateUrl : 'app/views/main.html',
+            controller: 'HomeCtrl'
+        })
+        .when('/hello', {
+            templateUrl : 'app/views/hello.html',
+            controller: 'HelloCtrl'
+        })
+        .otherwise({ redirectTo: '/' });
+}]);

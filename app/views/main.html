@@ -1,14 +1,14 @@
 <h1>My App!!</h1>
 
-        <h2>Message is: {{ message }}</h2>
+<h3>You are adding a person named: {{ lastname }}, {{ name }}</h3>
 
-<button ng-click="notifyChildren()">Notify children</button> | <button ng-click="emitToRootScope()">Emit to $rootScope</button>
-<br/>
-<h4>Result from doing stuff: {{ result }}</h4>
+<input type="text" placeholder="Name" ng-model="name"/>
+<input type="text" placeholder="Lastname" ng-model="lastname"/>
+<button ng-click="addPerson(name, lastname)">Add Person</button>
 
-<div ng-controller="NestedCtrl" style="margin: 5% 5%; padding: 5% 5%; border: solid 1px #e6e6e6">
-    <h4>Nested controller</h4>
-    <button ng-click="emitToParentScope()">Emit to parent</button>
-</div>
+<ul>
+    <li ng-repeat="person in people">{{ person.lastname }}, {{ person.name }}</li>
+</ul>
 
-<a href="#/hello">Go to hello</a>
+<br />
+<a href="#/hello">Go To hello!</a>

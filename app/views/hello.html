@@ -1,8 +1,22 @@
-<h1>Hello! {{ name }}</h1>
+<h1>Showing people</h1>
 
-<h2>How much is 2 + 2</h2>
-<p> 2 + 2 = {{ 2 + 2 }}</p>
+<h2>Search by id</h2>
 
-<h2>This is root name: {{ rootName }}</h2>
+<input type="text" ng-model="search" placeholder="Find Id"/>
+<button ng-click="find(search)"> Search </button>
 
+<br/>
+<br/>
+
+<span ng-hide="found">The id does not exists</span>
+<span ng-show="found">
+    Found person with ID: {{ id }}
+    and name: {{person.lastname}}, {{person.name}}
+</span>
+
+<h2>Show all!</h2>
+<button ng-click="findAll()">Show all!</button>
+<ul>
+    <li ng-repeat="p in people">{{ $index }} - {{p.lastname}}, {{p.name}}</li>
+</ul>
 <h3>Go big or <a href="#/">Go HOME</a></h3>
