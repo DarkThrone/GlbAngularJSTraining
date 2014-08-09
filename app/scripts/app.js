@@ -22,6 +22,16 @@ function($rootScope, $scope, MyConfigurable){
     }
 }]);
 
+app.controller('FormCtrl', ['$rootScope', '$scope',
+    function($rootScope, $scope){
+
+        $scope.submitMyForm = function(){
+            $scope.message = "Your form was submitted";
+
+            console.log($scope.awesomeform);
+        }
+    }]);
+
 app.controller('HelloCtrl', ['$rootScope', '$scope', 'MyConfigurable',
 function($rootScope, $scope, MyConfigurable){
     $scope.search = '';
@@ -29,6 +39,28 @@ function($rootScope, $scope, MyConfigurable){
     $scope.found = false;
     $scope.person = {};
     $scope.people = [];
+
+    $scope.mySpecialClass = function(type){
+        var isRed = true,
+            isBox = true,
+            isSmall = true;
+
+        switch(type){
+            case 'a':
+                return "red box small";
+            case 'b':
+                return ['red box', 'small', 'h5'];
+            case 'c':
+                return {
+                    'red' : isRed,
+                    'box' : isBox,
+                    'small' : isSmall,
+                    'h5' : isRed && isBox
+                };
+            default:
+                return '';
+        }
+    };
 
     $scope.find = function(id){
         var person = MyConfigurable.getPerson(id);
@@ -45,65 +77,67 @@ function($rootScope, $scope, MyConfigurable){
     }
 }]);
 
-    app.factory('MyFactory', [function(){
-        var people = [];
-        return {
-            addPerson: function(person){
-                people.push(person);
-            },
-            getPerson: function(id){
-                return people[id];
-            },
-            getAll : function(){
-                return people;
-            }
-        };
-    }]);
-    app.service('MySharedService', [function(){
-        this.people = [];
-
-        this.addPerson = function(person){
-            this.people.push(person);
-        };
-
-        this.getPerson = function(id){
-            return this.people[id];
-        };
-
-        this.getAll = function(){
-            return this.people;
-        };
-    }]);
-    app.provider('MyConfigurable', [function(){
-        var that = this;
-        that.configurableProp = "";
-
-        function ConfigurableService(){
-            this.people = [];
+app.factory('MyFactory', [function(){
+    var people = [];
+    return {
+        addPerson: function(person){
+            people.push(person);
+        },
+        getPerson: function(id){
+            return people[id];
+        },
+        getAll : function(){
+            return people;
         }
+    };
+}]);
 
-        ConfigurableService.prototype.addPerson = function(person){
-            console.log("Adding person with configurableProp: " + that.configurableProp);
-            this.people.push(person);
-        };
+app.service('MySharedService', [function(){
+    this.people = [];
 
-        ConfigurableService.prototype.getPerson = function(id){
-            console.log("Getting person with configurableProp: " + that.configurableProp);
-            return this.people[id];
-        };
+    this.addPerson = function(person){
+        this.people.push(person);
+    };
 
-        ConfigurableService.prototype.getAll = function(){
-            console.log("Gatting all with configurableProp: " + that.configurableProp);
-            return this.people;
-        };
+    this.getPerson = function(id){
+        return this.people[id];
+    };
 
-        this.$get = [function(){
-            return new ConfigurableService();
-        }];
-    }]);
+    this.getAll = function(){
+        return this.people;
+    };
+}]);
+
+app.provider('MyConfigurable', [function(){
+    var that = this;
+    that.configurableProp = "";
+
+    function ConfigurableService(){
+        this.people = [];
+    }
+
+    ConfigurableService.prototype.addPerson = function(person){
+        console.log("Adding person with configurableProp: " + that.configurableProp);
+        this.people.push(person);
+    };
+
+    ConfigurableService.prototype.getPerson = function(id){
+        console.log("Getting person with configurableProp: " + that.configurableProp);
+        return this.people[id];
+    };
+
+    ConfigurableService.prototype.getAll = function(){
+        console.log("Gatting all with configurableProp: " + that.configurableProp);
+        return this.people;
+    };
+
+    this.$get = [function(){
+        return new ConfigurableService();
+    }];
+}]);
 
 app.config(['$routeProvider', 'MyConfigurableProvider', function($routeProvider, MyConfigurableProvider){
-    MyConfigurableProvider.configurableProp = "[ConfigurableProvider]";
+    MyConfigurableProvider.configurableProp = "Provider prop";
 
     $routeProvider
         .when('/', {
@@ -113,6 +147,10 @@ app.config(['$routeProvider', 'MyConfigurableProvider', function($routeProvider,
         .when('/hello', {
             templateUrl : 'app/views/hello.html',
             controller: 'HelloCtrl'
+        })
+        .when('/form', {
+            templateUrl : 'app/views/form.html',
+            controller: 'FormCtrl'
         })
         .otherwise({ redirectTo: '/' });
 }]);
