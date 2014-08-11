@@ -1,0 +1,31 @@
+.app-container {
+    width: 95%;
+    margin: 2% auto;
+}
+
+.animate-show {
+    opacity:1;
+    -webkit-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+}
+
+.animate-show.ng-hide-add.ng-hide-add-active,
+.animate-show.ng-hide-remove.ng-hide-remove-active {
+    -webkit-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+}
+
+.animate-show.ng-hide {
+    opacity:0;
+}
+
+.pure-form input.ng-invalid,
+.pure-form select.ng-invalid {
+    color: #b94a48;
+    border: 1px #ee5f5b solid;
+}
+
+input.ng-valid,
+select.ng-valid {
+    border: 1px #55DD55 solid;
+}

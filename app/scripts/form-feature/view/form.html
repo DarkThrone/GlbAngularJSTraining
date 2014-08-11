@@ -1,0 +1,118 @@
+<h2>Message</h2>
+
+        <div>{{form.flash}}</div>
+        
+        <div>
+            <ul>
+                <li>form.user.email.$invalid: {{form.user.name.$invalid}}</li>
+                <li>form.user.email.$error: {{form.user.name.$error}}</li>
+                <li>form.user.$valid: {{form.user.$valid}}</li>
+                <li>form.user.$error.required: {{form.user.$error.required}}</li>
+            </ul>
+        </div>
+
+<form ng-submit="form.submitMyForm()" name="form.user" id="user" class="pure-form pure-form-aligned">
+    <fieldset>
+        <legend>Enter your personal information</legend>
+
+        <div class="pure-control-group">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Name"
+                   min="4" maxlength="20"
+                   ng-minlength="4" ng-maxlength="19"
+                   ng-model="form.userName" ng-required="true"/>
+        </div>
+
+        <div class="pure-control-group">
+            <label for="surname">Surname</label>
+            <input id="surname" name="surname" type="text" placeholder="Surname" ng-model="form.userSurname" ng-required/>
+        </div>
+
+        <div class="pure-control-group">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="your@email.com" ng-model="form.userEmail" ng-required/>
+        </div>
+
+        <div class="pure-control-group">
+            <label for="birthdate">Birthdate</label>
+            <input id="birthdate" name="birthdate" type="date"/>
+        </div>
+
+        <div class="pure-control-group">
+            <label for="gender">Gender</label>
+            <select ng-model="form.gender" name="gender" id="gender" ng-options="gender for gender in form.genders">
+                <option value="">--- Choose your gender ---</option>
+            </select>
+
+        </div>
+
+        <legend>Are you a programmer?</legend>
+
+        <div class="pure-control-group">
+            <label for="yes" class="pure-u-1-5">Yes</label>
+            <input id="yes" type="radio" ng-value="true" name="isProgrammer" ng-model="form.isDev"/>
+        </div>
+
+        <div class="pure-control-group">
+            <label for="no" class="pure-u-1-5">No</label>
+            <input id="no" type="radio" ng-value="false" name="isProgrammer" ng-model="form.isDev"/>
+        </div>
+
+        <fieldset ng-show="form.isDev" ng-form="languages" class="pure-g-r animate-show">
+            <legend>Pick your poison</legend>
+
+            <label for="{{language}}" class="pure-u-sm-1-5" ng-repeat="language in form.languagesTopic">
+                <input id={{language}} type="checkbox" name="language" ng-model="form.languages[language]" ng-change="form.log()"/>
+                {{language}}
+            </label>
+        </fieldset>
+
+
+        <legend>Wanna share you interests?</legend>
+
+        <div class="pure-control-group">
+            <label for="yes-share" class="pure-u-1-5">Yes</label>
+            <input id="yes-share" type="radio" ng-value="true" ng-model="form.shareInterests"/>
+        </div>
+
+        <div class="pure-control-group">
+            <label for="no-share" class="pure-u-1-5">No</label>
+            <input id="no-share" type="radio" ng-value="false" ng-model="form.shareInterests"/>
+        </div>
+
+        <fieldset ng-show="form.shareInterests" ng-form="interests" class="pure-form pure-form-stacked animate-show">
+            <legend>Choose your interests:</legend>
+
+            <div class="pure-g-r">
+                <div class="pure-u-1 pure-u-md-1-5">
+                    <label for="general">General interest</label>
+                    <select name="general" id="general"
+                            ng-options="generalTopic.name for generalTopic in form.generalTopics track by generalTopic.id"
+                            ng-model="form.generalTopic"
+                            ng-change="form.logGen()">
+                        <option value="">--- General Topic ---</option>
+                    </select>
+                </div>
+
+                <div class="pure-u-1 pure-u-md-1-5">
+                    <label ng-show="form.generalTopic" for="subtopic">Sub Topic</label>
+                    <select ng-show="form.generalTopic" name="subtopic" id="subtopic"
+                            ng-options="subTopic.name group by subTopic.group for subTopic in form.subTopics[form.generalTopic.id] track by subTopic.id"
+                            ng-model="form.subTopic"
+                            ng-change="form.logSub()">
+                        <option value="">--- Sub Topic ---</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="pure-controls">
+
+            <label for="tos" class="pure-checkbox">
+                <input id="tos" name="tos" type="checkbox"/> Do you not agree to the terms of service?
+            </label>
+
+            <button type="submit" class="pure-button pure-button-primary">To infinity and BEYOND!</button>
+        </div>
+    </fieldset>
+</form>
