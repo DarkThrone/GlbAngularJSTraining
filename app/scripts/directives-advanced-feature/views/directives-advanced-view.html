@@ -1,0 +1,7 @@
+<h2>An advanced directive</h2>
+
+<p>This time directive parses an arbitraty time string and shows a normalized timestamp in the form of hh:mm:ss</p>
+<p>adv.timeForm.$error.$invalidTime: {{ adv.timeForm.$error.$invalidTime }}</p>
+<form name="adv.timeForm">
+    <input ng-model="adv.timeInMillis" placeholder="{{ adv.label }}" glb-time />
+</form>
