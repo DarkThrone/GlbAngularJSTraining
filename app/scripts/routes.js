@@ -26,5 +26,21 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'DirectiveAdvancedCtrl',
             controllerAs: 'adv'
         })
+        .when('/user-feature', {
+            templateUrl : 'app/scripts/user-feature/view/main.html',
+            controller: 'UserCtrl'
+        })
+        .when('/user-feature/create', {
+            templateUrl : 'app/scripts/user-feature/view/create.html',
+            controller: 'CreateCtrl'
+        })
+        .when('/user-feature/delete', {
+            templateUrl : 'app/scripts/user-feature/view/delete.html',
+            controller: 'DeleteCtrl'
+        })
+        .when('/user-feature/update', {
+            templateUrl : 'app/scripts/user-feature/view/update.html',
+            controller: 'UpdateCtrl'
+        })
         .otherwise({ redirectTo: '/' });
 }]);

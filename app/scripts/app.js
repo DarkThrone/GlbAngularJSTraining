@@ -3,7 +3,7 @@
  */
 
 'use strict';
-var app = angular.module('MyApp', ['ngRoute', 'ngAnimate']);
+var app = angular.module('MyApp', ['ngRoute', 'ngResource','ngAnimate']);
 
 app.controller('HomeCtrl', ['$scope',
 function($scope){}]);

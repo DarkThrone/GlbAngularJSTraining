@@ -1,0 +1,57 @@
+<header class="pure-u-1">
+    <nav>
+        <a href="#/create" class="pure-button pure-button-primary">Create</a>
+        <a href="#/delete" class="pure-button pure-button-primary">Delete</a>
+        <a href="#/update" class="pure-button pure-button-primary">Update</a>
+    </nav>
+</header>
+
+<main class="pure-g-r">
+    <section class="pure-u-1">
+        <h2>Update a user!</h2>
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-horizontal">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tr ng-repeat="(id, user) in users">
+                    <td>{{ id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>
+                        <button class="pure-button pure-button-primary"
+                                ng-click="pick(id)">
+                            &#x270F;
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="pure-u-1">
+            <h3>Update your user</h3>
+            <form class="pure-form pure-form-aligned" name="user" ng-submit="updateUser()">
+                <fieldset class="pure-group">
+                    <input id="name"
+                           name="name"
+                           type="text"
+                           ng-model="name"
+                           placeholder="Name"/>
+                    <input id="age"
+                           name="age"
+                           type="text"
+                           ng-model="age"
+                           placeholder="Age"/>
+                    <input id="superpower"
+                           name="superpower"
+                           type="text"
+                           ng-model="superpower"
+                           placeholder="Superpower"/>
+                </fieldset>
+                <input type="submit" class="pure-button pure-button-primary" value="Create!">
+            </form>
+        </div>
+    </section>
+</main>
